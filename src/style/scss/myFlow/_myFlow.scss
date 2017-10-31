@@ -1,13 +1,40 @@
 .myFlow{
 	.container{
 		padding-bottom:44px;
+		.caonima{
+			height:90.5%;
+			overflow-y:auto;
+			.btn{
+				height:40px;
+				background:#fff;
+				span{
+					display:inline-block;
+					width:49.9%;
+					height:37px;
+					line-height:40px;
+					float:left;
+					text-align:center;
+					border-bottom:3px solid #fff;
+				}
+				.colorSpan{
+					color:#26a2ff;
+					border-bottom-color:#26a2ff;
+				}
+			}
+			.logArea {
+    			height: 91.5%;
+    		}
+    		.logArea1{
+    			display:none;
+    		}
+		}
 	}
 }
 .flowArea{
 	border:1px solid rgb(77, 169, 235);
 	border-radius:5px;
 	background:#fff;
-	margin:15px 30px;
+	margin:15px 0px;
 	h3{
 		text-align:center;
 		line-height:42px;
@@ -23,7 +50,7 @@
 			color: #666666;
 			text-align: right;
 			min-width:25%;
-			padding-right:5%;			
+			padding-right:5%;
 		}
 		.flowTitle2{
 			float:left;
@@ -38,11 +65,18 @@
 			float:left;
 			text-align: right;
 			min-width:25%;
+			line-height:32px;
 			padding-right:5%;
 		}
 		.flowStatus2{
 			float:left;
 			max-width:70%;
+			.title{
+			  height:32px;
+			}
+			.reason{
+			  width:180px;
+			}
 		}
 		.reject{
 			color:rgb(255,153,102);

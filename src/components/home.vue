@@ -3,10 +3,10 @@
 	<div class="home">
 		<!-- tab-container -->
 		<mt-tab-container v-model="active">
-			
+
 			<!--<mt-tab-container-item id="message-container">
 				<div class="container">
-					 MESSAGE SELECT 
+					 MESSAGE SELECT
 					<div class="message-select">
 						<select name="">
 							<option value="0">全部</option>
@@ -15,7 +15,7 @@
 							<option value="3">叮消息</option>
 						</select>
 					</div>
-					 MESSAGE CONTENT  
+					 MESSAGE CONTENT
 					<div class="message-box">
 						<div class="message-item">
 							<div class="message-detail">
@@ -95,7 +95,7 @@
 						</div>
 						<hr />
 					</div>
-				
+
 				</div>
 			</mt-tab-container-item>
 			<mt-tab-container-item id="my-container">
@@ -133,7 +133,7 @@
 					<br />
 					<!-- <div class="out-login">
 						<a data="logout" v-on:click="toPage">退出登录</a>
-					</div> -->				
+					</div> -->
 				</div>
 			</mt-tab-container-item>
 		</mt-tab-container>
@@ -181,11 +181,11 @@ export default {
 	},
 	created () {
 		// 组件创建完后执行
-		/*$.ajax({
-			url: 'http://192.168.0.108:8888/mdoa/phUser/login.ph',
+		$.ajax({
+			url: 'http://localhost:8888/mdoa/phUser/login.ph',
 			data:{
 				sessionId: localStorage.getItem('sessionId') || null,
-				userAccount : '100101',
+				userAccount : 'lvbing',
 				password : '123456'
 				// userAccount : '3000272',
 				// password : '123456'
@@ -197,15 +197,15 @@ export default {
 					localStorage.setItem('sessionId',data.sessionId);
 				}
 				if(data.success){
-					
+
 				}else{
-					
+
 				}
 			},
 			error:function() {
 
 			}
-		})*/
+		})
 		var el = this;
 		el.$index.ajax(this, '/phUser/getUser.ph', null, function(data){
 			// 成功回调
@@ -265,7 +265,7 @@ export default {
 				this.active = 'my-container'
 			}
 			/*if(val == 'message'){
-				this.active = 'message-container'				
+				this.active = 'message-container'
 			}*/
 			//changeImg
 			this.changeImg(val);
@@ -286,7 +286,7 @@ export default {
 				$('.'+ val +'').attr('src',messageSrco);
 				$('.work').attr('src',allSrc);
 				$('.my-condition').attr('src',accountSrc);
-			}*/ 
+			}*/
 		},
 		toPage:function(event){
 			var el = event.currentTarget;
@@ -304,7 +304,7 @@ export default {
 						position: 'center',
 						duration: 2000
 					});
-				}				
+				}
 			}else if (a == 1) {//本组件data属性设置为1的，页面前往工作日志页面
 				this.$router.push({path:'/workLog'});
 			}else if(a == 'system'){
@@ -321,7 +321,7 @@ export default {
 			// 	localStorage.removeItem('password');
 			// 	this.$router.push({path:'/'});
 			// }
-			
+
 		}
 	}
 }

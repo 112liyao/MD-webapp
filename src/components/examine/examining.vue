@@ -56,17 +56,8 @@ export default {
 			var el = event.currentTarget;
 			var a = $(el).attr('data');
 			var examineStatus ;
-			if(that.executorIdea == '' || that.executorIdea == null){
-				Toast({
-					message: '审批意见不能为空',
-					duration: 2000
-				});
-			}else{
-				if(a == 0){
-					examineStatus = '2';
-				}else if (a == 1) {
-					examineStatus = '3';
-				}
+			if(a == 0){
+				examineStatus = '2';
 				var info = {
 					examineStatus:examineStatus,
 					executorIdea:that.executorIdea,
@@ -79,7 +70,28 @@ export default {
 					});
 					that.$router.push({path:'/examine'});
 				});
-			}			
+			}else if (a == 1) {
+				examineStatus = '3';
+				if(that.executorIdea == '' || that.executorIdea == null){
+					Toast({
+						message: '审批意见不能为空',
+						duration: 2000
+					});
+				}else{
+					var info = {
+						examineStatus:examineStatus,
+						executorIdea:that.executorIdea,
+						taskId:that.$leaveType.taskId
+					}
+					that.$index.ajax(that,'/phMyProcess/examineTask.ph',info,function(data){
+						Toast({
+							message: data,
+							duration: 2000
+						});
+						that.$router.push({path:'/examine'});
+					});
+				}
+			}		
 		}
 	}
 }

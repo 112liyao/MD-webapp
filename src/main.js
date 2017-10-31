@@ -45,6 +45,17 @@ Vue.prototype.$user = new Object()
 Vue.prototype.$log = new Object()
 // 为全局设置一个全局变量 记录leaveType
 Vue.prototype.$leaveType = new Object()
+//3色随机
+Vue.prototype.changeColor = function(){
+    var i = Math.random()*3;
+    if(i<1){
+        return '#ffac38';
+    }else if(i<2){
+        return '#8eb9f5';
+    }else{
+        return '#b38979';
+    }
+}
 // 运行
 new Vue({
   router,

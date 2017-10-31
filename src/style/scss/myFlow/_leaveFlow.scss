@@ -49,16 +49,23 @@
 	}
 	.examine{
 		.addPeople{
+			margin-top:20px;
 			margin-left:4px;
 		}
 	}
 	.copyTo{
 		.addPeople{
+			margin-top:0px;
 			margin-left:4px;
 		}
 	}
+	.flowStatus2{
+		.reason{
+		  width:204px!important;
+			height:60px;
+		}
+	}
 	.btnArea{
-		padding:0 30px;
 	}
 	.chooseBox{
 		display:none;

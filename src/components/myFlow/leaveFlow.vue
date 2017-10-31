@@ -1,6 +1,6 @@
 //leaveFlow.vue
 <template>
-	<div class="leaveFlow">	
+	<div class="leaveFlow">
 		<!-- 内容 -->
 		<div class="container">
 			<div class="title-box">
@@ -17,20 +17,18 @@
 				<div class="flowArea">
 					<h3>流程</h3>
 					<div class="flowMould">
-						<p>审批人</p>
+						<p>审批人 <span class="iconApprover"></span></p>
 						<div class="flowChart examine">
 							<span class="flowPeople addPeople" data="0" v-on:click="addPeople">添加</span>
 						</div>
-						<p>必须的审批人</p>
 						<div class="flowChart mustExamine">
 						</div>
 					</div>
 					<div class="flowMould">
-						<p>抄送人</p>
+						<p>抄送人 <span class="iconCoppy"></span></p>
 						<div class="flowChart copyTo">
 							<span class="flowPeople addPeople" data="1" v-on:click="addPeople">添加</span>
 						</div>
-						<p>必须的抄送人</p>
 						<div class="flowChart mustCopyTo">
 						</div>
 					</div>
@@ -109,7 +107,7 @@ export default {
 	created () {
 		// 组件创建完后执行
 	},
-	mounted () {		
+	mounted () {
 		//渲染完以后执行，生命周期内只执行一次，初始化数据
 		var that = this;
 		var typeId = that.$leaveType.typeId;
@@ -122,19 +120,19 @@ export default {
 					+  '</div>'
 					+  '<div class="flowStatus">'
 					+  '<div  class="flowStatus1">请假类型</div>'
-					+  '<div  class="flowStatus2"><select class="leaveType"></select></div>'	
-					+  '</div>'	
+					+  '<div  class="flowStatus2"><select class="leaveType"></select></div>'
+					+  '</div>'
 					+  '<div class="flowStatus">'
 					+  '<div  class="flowStatus1">开始时间</div>'
-					+  '<div  class="flowStatus2 startTime"></div>'	
-					+  '</div>'	
+					+  '<div  class="flowStatus2 startTime"></div>'
+					+  '</div>'
 					+  '<div class="flowStatus">'
 					+  '<div  class="flowStatus1">结束时间</div>'
-					+  '<div  class="flowStatus2 endTime"></div>'	
-					+  '</div>'	
+					+  '<div  class="flowStatus2 endTime"></div>'
+					+  '</div>'
 					+  '<div class="flowStatus">'
 					+  '<div  class="flowStatus1">请假原因</div>'
-					+  '<div  class="flowStatus2 "><textarea class="reason"></textarea></div>'	
+					+  '<div  class="flowStatus2 "><textarea class="reason"></textarea></div>'
 					+  '</div>';
 			$('.leaveFlow .flow').append(flowStr);
 			that.$index.ajax(that,'/phDictionary/queryDictionary.ph',{selectKey:'leave_type'},function(data){
@@ -160,15 +158,15 @@ export default {
 					+  '</div>'
 					+  '<div class="flowStatus">'
 					+  '<div  class="flowStatus1">开始时间</div>'
-					+  '<div  class="flowStatus2 startTime"></div>'	
-					+  '</div>'	
+					+  '<div  class="flowStatus2 startTime"></div>'
+					+  '</div>'
 					+  '<div class="flowStatus">'
 					+  '<div  class="flowStatus1">结束时间</div>'
-					+  '<div  class="flowStatus2 endTime"></div>'	
-					+  '</div>'	
+					+  '<div  class="flowStatus2 endTime"></div>'
+					+  '</div>'
 					+  '<div class="flowStatus">'
 					+  '<div  class="flowStatus1">公出原因</div>'
-					+  '<div  class="flowStatus2 "><textarea class="reason"></textarea></div>'	
+					+  '<div  class="flowStatus2 "><textarea class="reason"></textarea></div>'
 					+  '</div>';
 			$('.leaveFlow .flow').append(flowStr);
 			$('.leaveFlow .flow .startTime').click(function(){
@@ -186,7 +184,7 @@ export default {
 					+  '</div>'
 					+  '<div class="flowStatus">'
 					+  '<div  class="flowStatus1">离职原因</div>'
-					+  '<div  class="flowStatus2 "><textarea class="reason"></textarea></div>'	
+					+  '<div  class="flowStatus2 "><textarea class="reason"></textarea></div>'
 					+  '</div>';
 			$('.leaveFlow .flow').append(flowStr);
 		}else if (typeId == '007') {
@@ -199,14 +197,14 @@ export default {
 					+  '<div class="flowStatus">'
 					+  '<div  class="flowStatus1">补卡日期</div>'
 					+  '<div  class="flowStatus2 startTime">'+that.$leaveType.replaceRecordDate+'</div>'
-					+  '</div>'	
+					+  '</div>'
 					+  '<div class="flowStatus">'
 					+  '<div  class="flowStatus1">补卡时间</div>'
-					+  '<div  class="flowStatus2 endTime">'+that.$leaveType.replaceTime+'</div>'	
+					+  '<div  class="flowStatus2 endTime">'+that.$leaveType.replaceTime+'</div>'
 					+  '</div>'
 					+  '<div class="flowStatus">'
 					+  '<div  class="flowStatus1">补卡原因</div>'
-					+  '<div  class="flowStatus2 "><textarea class="reason"></textarea></div>'	
+					+  '<div  class="flowStatus2 "><textarea class="reason"></textarea></div>'
 					+  '</div>';
 			$('.leaveFlow .flow').append(flowStr);
 		}
@@ -218,9 +216,9 @@ export default {
 				var excuteUserHead = data.excuteUserHead;
 				var str = '';
 				for (var i = 0; i<excuteUserHead.length ; i++) {
-				 	str += '<span class="flowPeople" id="'+excuteUserHead[i].executorId+'" taskId="'+excuteUserHead[i].taskId+'">'+excuteUserHead[i].executorName+'</span>';
+				 	str += '<span class="flowPeople" id="'+excuteUserHead[i].executorId+'" taskId="'+excuteUserHead[i].taskId+'"><span class="head">'+excuteUserHead[i].executorName.substring(excuteUserHead[i].executorName.length-2)+'</span><br/>'+excuteUserHead[i].executorName+'</span>';
 				 	str += '<img slot="icon" src="'+arrow+'" width="24" height="24" >'
-				}; 
+				};
 				$('.leaveFlow .flowArea .examine .addPeople').before(str);
 				$('.leaveFlow .flowArea .examine img:last').remove();
 			}
@@ -228,7 +226,7 @@ export default {
 				var mustExcuteUserHead = data.mustExcuteUserHead;
 				var mustExStr = '';
 				for(var i = 0;i<mustExcuteUserHead.length;i++){
-					mustExStr += '<span class="flowPeople" id="'+mustExcuteUserHead[i].executorId+'" taskId="'+mustExcuteUserHead[i].taskId+'">'+mustExcuteUserHead[i].executorName+'</span>';
+					mustExStr += '<span class="flowPeople" id="'+mustExcuteUserHead[i].executorId+'" taskId="'+mustExcuteUserHead[i].taskId+'"><span class="head">'+mustExcuteUserHead[i].executorName.substring(mustExcuteUserHead[i].executorName.length-2)+'</span><br/>'+mustExcuteUserHead[i].executorName+'</span>';
 				 	mustExStr += '<img slot="icon" src="'+arrow+'" width="24" height="24" >'
 				}
 				$('.leaveFlow .flowArea .mustExamine').html(mustExStr);
@@ -238,7 +236,7 @@ export default {
 				var copyToUsers = data.copyToUsers;
 				var str = '';
 				for(var i = 0 ; i < copyToUsers.length ; i++){
-					str += '<span class="flowPeople" id="'+copyToUsers[i].executorId+'" taskId="'+copyToUsers[i].taskId+'">'+copyToUsers[i].executorName+'</span>';
+					str += '<span class="flowPeople" id="'+copyToUsers[i].executorId+'" taskId="'+copyToUsers[i].taskId+'"><span class="head">'+copyToUsers[i].executorName.substring(copyToUsers[i].executorName.length-2)+'</span><br/>'+copyToUsers[i].executorName+'</span>';
 				}
 				$('.leaveFlow .flowArea .copyTo .addPeople').before(str);
 			}
@@ -246,7 +244,7 @@ export default {
 				var mustCopyToUsers = data.mustCopyToUsers;
 				var mustStr = '';
 				for(var i = 0 ; i < mustCopyToUsers.length ; i++){
-					mustStr += '<span class="flowPeople" id="'+mustCopyToUsers[i].executorId+'" taskId="'+mustCopyToUsers[i].taskId+'">'+mustCopyToUsers[i].executorName+'</span>';
+					mustStr += '<span class="flowPeople" id="'+mustCopyToUsers[i].executorId+'" taskId="'+mustCopyToUsers[i].taskId+'"><span class="head">'+mustCopyToUsers[i].executorName.substring(mustCopyToUsers[i].executorName.length-2)+'</span><br/><br/>'+mustCopyToUsers[i].executorName+'</span>';
 				}
 				$('.leaveFlow .flowArea .mustCopyTo').html(mustStr);
 			}
@@ -319,7 +317,7 @@ export default {
 		selectBeginDate:function(value){
 			//this.showBeginDate = value.Format('yyyy-MM-dd hh:mm');
 			$('.leaveFlow .flow .startTime').text(value.Format('yyyy-MM-dd hh:mm'));
-			
+
 		},
 		selectEndDate:function(value){
 			//this.showEndDate = value.Format('yyyy-MM-dd hh:mm');
@@ -382,9 +380,9 @@ export default {
 				}
 				that.$index.ajax(that,'/phMyProcess/addExecute.ph',info,function(data){
 					if($('.leaveFlow .examine .flowPeople').length == 1){
-						var str = '<span class="flowPeople" id="'+userId+'" taskId="'+data+'">'+userName+'</span>';
+						var str = '<span class="flowPeople" id="'+userId+'" taskId="'+data+'"><span class="head">'+userName.substring(userName.length-2)+'</span><br/>'+userName+'</span>';
 					}else{
-						var str = '<img slot="icon" src='+arrow+' width="24" height="24" ><span class="flowPeople" id="'+userId+'" taskId="'+data+'">'+userName+'</span>';
+						var str = '<img slot="icon" src='+arrow+' width="24" height="24" ><span class="flowPeople" id="'+userId+'" taskId="'+data+'"><span class="head">'+userName.substring(userName.length-2)+'</span><br/>'+userName+'</span>';
 					}
 					$('.leaveFlow .examine .addPeople').before(str);
 					$('.leaveFlow .chooseBox').hide();
@@ -423,7 +421,7 @@ export default {
 										$(jqthat).prev('img').remove();
 									}else{
 										$(jqthat).next('img').remove();
-									}									
+									}
 									$(jqthat).remove();
 								}
 							});
@@ -437,7 +435,7 @@ export default {
 					userName:userName
 				}
 				that.$index.ajax(that,'/phMyProcess/addCopyTo.ph',info,function(data){
-					var str = '<span class="flowPeople" id="'+userId+'" taskId="'+data+'">'+userName+'</span>';
+					var str = '<span class="flowPeople" id="'+userId+'" taskId="'+data+'"><span class="head">'+userName.substring(userName.length-2)+'</span><br/>'+userName+'</span>';
 					$('.leaveFlow .copyTo .addPeople').before(str);
 					$('.leaveFlow .chooseBox').hide();
 					$('.leaveFlow .container').eq(0).show();
@@ -465,7 +463,7 @@ export default {
 					});
 				});
 			}
-			
+
 		},
 		backChooseDet:function(event){
 			var el = event.currentTarget;

@@ -14,35 +14,88 @@
 					</div>
 				</div>
 			</div>
-			<div class="logArea">
-				<div class="flowArea" v-for="item of items">
-					<h3>{{ item.processTypeName }}</h3>
-					<div class="flowStatus">
-						<div  class="flowStatus1">
-							标题
+			<div class="caonima" v-bind:style="{height : h}">
+				<div class="btn">
+					<span class="myStartFlow colorSpan" v-on:click="change">我发起的流程</span>
+					<span class="myExamineFlow" v-on:click="change">我参与审批的流程</span>
+				</div>
+				<div class="logArea" v-bind:style="{height : H}">
+					<div class="flowArea" v-for="item of myStratItems">
+						<h3>{{ item.processTypeName }}</h3>
+						<div class="flowStatus">
+							<div  class="flowStatus1">
+								标题
+							</div>
+							<div  class="flowStatus2">
+								{{ item.title }}
+							</div>
 						</div>
-						<div  class="flowStatus2">
-							{{ item.title }}
+						<div class="flowStatus">
+							<div  class="flowStatus1">
+								申请人
+							</div>
+							<div  class="flowStatus2">
+								我
+							</div>
 						</div>
+						<div class="flowStatus">
+							<div  class="flowStatus1">
+								审批状态
+							</div>
+							<div  class="flowStatus2" v-if="item.executeStatus == 1">
+								审批中
+							</div>
+							<div  class="flowStatus2 poss" v-if="item.executeStatus == 2">
+								通过
+							</div>
+							<div  class="flowStatus2 reject" v-if="item.executeStatus == 3">
+								驳回
+							</div>
+							<div  class="flowStatus2" v-if="item.executeStatus == 4">
+								撤回
+							</div>
+						</div>
+						<div class="button" v-bind:id="item.processRecordId" data="1" v-on:click="toPage">查看</div>
 					</div>
-					<div class="flowStatus">
-						<div  class="flowStatus1">
-							审批状态
+				</div>
+				<div class="logArea logArea1" v-bind:style="{height : H}">
+					<div class="flowArea" v-for="item of myExamineItems">
+						<h3>{{ item.processTypeName }}</h3>
+						<div class="flowStatus">
+							<div  class="flowStatus1">
+								标题
+							</div>
+							<div  class="flowStatus2">
+								{{ item.title }}
+							</div>
 						</div>
-						<div  class="flowStatus2" v-if="item.executeStatus == 1">
-							审批中
+						<div class="flowStatus">
+							<div  class="flowStatus1">
+								申请人
+							</div>
+							<div  class="flowStatus2">
+								{{ item.userName }}
+							</div>
 						</div>
-						<div  class="flowStatus2 poss" v-if="item.executeStatus == 2">
-							通过
+						<div class="flowStatus">
+							<div  class="flowStatus1">
+								审批状态
+							</div>
+							<div  class="flowStatus2" v-if="item.executeStatus == 1">
+								审批中
+							</div>
+							<div  class="flowStatus2 poss" v-if="item.executeStatus == 2">
+								通过
+							</div>
+							<div  class="flowStatus2 reject" v-if="item.executeStatus == 3">
+								驳回
+							</div>
+							<div  class="flowStatus2" v-if="item.executeStatus == 4">
+								撤回
+							</div>
 						</div>
-						<div  class="flowStatus2 reject" v-if="item.executeStatus == 3">
-							驳回
-						</div>
-						<div  class="flowStatus2" v-if="item.executeStatus == 4">
-							撤回
-						</div>
+						<div class="button" v-bind:id="item.processRecordId" data="1" v-on:click="toPage">查看</div>
 					</div>
-					<div class="button" v-bind:id="item.processRecordId" data="1" v-on:click="toPage">查看</div>
 				</div>
 			</div>
 		</div>
@@ -57,8 +110,15 @@
 export default {
 	data() {
 		return {
-			items:[]
+			myStratItems:[],
+			myExamineItems:[],
+			h:$('.container').height()-48+'px',
+			H:$('.container').height()-88+'px'
 		}
+	},
+	mounted () {
+		this.h = $('.container').height()-48+'px';
+		this.H = $('.container').height()-88+'px';
 	},
 	mounted () {
 		var info = {
@@ -66,8 +126,11 @@ export default {
 			userName : this.$user.userName
 		}
 		var that = this;
-		that.$index.ajax(that,'/phMyRelated/getProcessList.ph',null,function(data){
-			that.items = data.rows;
+		that.$index.ajax(that,'/phMyRelated/getProcessList.ph',{relativeLeave:'02'},function(data){
+			that.myStratItems = data.rows;
+		});
+		that.$index.ajax(that,'/phMyRelated/getProcessList.ph',{relativeLeave:'01'},function(data){
+			that.myExamineItems = data.rows;
 		});
 	},
 	methods: {
@@ -85,6 +148,14 @@ export default {
 			}else if (a == 2) {
 				this.$router.push({path:'/launchFlow'});
 			}
+		},
+		change:function(event){
+			var ele = event.currentTarget;
+			var index = $(ele).index();
+			$('.colorSpan').removeClass('colorSpan');
+			$(ele).addClass('colorSpan');
+			$('.caonima .logArea').hide();
+			$('.caonima .logArea').eq(index).show();
 		},
 		refresh:function(){
 			window.location.reload()

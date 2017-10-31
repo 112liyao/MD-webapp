@@ -1,9 +1,9 @@
 <template>
-	<div class="lookCopyTo">	
+	<div class="lookCopyTo">
 		<!-- 内容 -->
 		<div class="container">
 			<div class="title-box">
-				<img slot="icon" src="../../static/icon/left.svg" width="24" height="24" data="0" v-on:click="toPage">							
+				<img slot="icon" src="../../static/icon/left.svg" width="24" height="24" data="0" v-on:click="toPage">
 				<div class="m-office">
 					抄送流程详情
 				</div>
@@ -57,44 +57,18 @@
 				<div class="flowArea">
 					<h3>流程</h3>
 					<div class="flowMould">
-						<p>审批人</p>
+						<p>审批人 <span class="iconApprover"></span></p>
 						<div class="flowChart examine">
+						</div>
+						<div class="flowChart mustExamine">
 						</div>
 					</div>
 					<div class="flowMould">
-						<p>抄送人</p>
-						<div class="flowChart copy">
+						<p>抄送人<span class="iconCoppy"></span></p>
+						<div class="flowChart copyTo">
 						</div>
-					</div>
-				</div>
-				<div class="flowArea" v-for="item of items">
-					<div class="flowStatus" style="border-top:none;">
-						<div  class="flowStatus1">
-							审批人
+						<div class="flowChart mustCopyTo">
 						</div>
-						<div  class="flowStatus2">
-							{{ item.executorName }}
-						</div>
-					</div>
-					<div class="flowStatus">
-						<div  class="flowStatus1">
-							审批意见
-						</div>
-						<div  class="flowStatus2">
-							{{ item.executorIdea }}
-						</div>
-					</div>
-					<div class="button" v-if="item.examineStatus == 2">
-						通过
-					</div>
-					<div class="button examine-btn" v-if="item.examineStatus == 1">
-						审批中
-					</div>
-					<div class="button reject-btn" v-if="item.examineStatus == 3">
-						驳回
-					</div>
-					<div class="button reject-btn" v-if="item.examineStatus == 4">
-						撤回
 					</div>
 				</div>
 			</div>
@@ -107,7 +81,6 @@ import arrow from '../../static/icon/arrow.svg';
 export default {
 	data() {
 		return {
-			items:[],
 			leaveType:'',
 			userName:'',
 			title:'',
@@ -151,23 +124,71 @@ export default {
 			that.reason = data.reason;
 		});
 		that.$index.ajax(that,'/phMyRelated/getProcessExecutor.ph',info,function(data){
-			var excuteUserHead = data.excuteUserHead;
-			var str = '';
-			for (var i = excuteUserHead; i ; i = i.nextTask) {
-			 	str += '<span class="flowPeople" id="'+i.executorId+'">'+i.executorName+'</span>';
-			 	str += '<img slot="icon" src="'+arrow+'" width="24" height="24" >'
-			}; 
-			$('.lookCopyTo .flowArea .examine').append(str);
-			$('.lookCopyTo .flowArea .examine img:last').remove();
-			var copyToUsers = data.copyToUsers;
-			str = '';
-			for(var i = 0;i<copyToUsers.length;i++){
-				str += '<span class="flowPeople" id="'+copyToUsers[i].executorId+'">'+copyToUsers[i].executorName+'</span>';
+			if (data.excuteUserHead) {
+				var excuteUserHead = data.excuteUserHead;
+				var str = '';
+				for (var i = 0; i<excuteUserHead.length ; i++) {
+				 	str += '<span class="flowPeople" id="'+excuteUserHead[i].executorId+'" taskId="'+excuteUserHead[i].taskId+'"><span class="head" style="background:'+that.changeColor()+'">'+excuteUserHead[i].executorName+'</span><br/>'+excuteUserHead[i].executorName+'</span>';
+				 	str += '<img slot="icon" src="'+arrow+'" width="24" height="24" >';
+				};
+				$('.lookCopyTo .flowArea .examine').append(str);
+				$('.lookCopyTo .flowArea .examine img:last').remove();
 			}
-			$('.lookCopyTo .flowArea .copy').append(str);
+			if(data.mustExcuteUserHead){
+				var mustExcuteUserHead = data.mustExcuteUserHead;
+				var mustExStr = '';
+				for(var i = 0;i<mustExcuteUserHead.length;i++){
+					mustExStr += '<span class="flowPeople" id="'+mustExcuteUserHead[i].executorId+'" taskId="'+mustExcuteUserHead[i].taskId+'"><span class="head" style="background:'+that.changeColor()+'">'+mustExcuteUserHead[i].executorName+'</span><br/>'+mustExcuteUserHead[i].executorName+'</span>';
+				 	mustExStr += '<img slot="icon" src="'+arrow+'" width="24" height="24" >';
+				}
+				$('.lookCopyTo .flowArea .mustExamine').html(mustExStr);
+				$('.lookCopyTo .flowArea .mustExamine img:last').remove();
+			}
+			if(data.copyToUsers){
+				var copyToUsers = data.copyToUsers;
+				console.log(copyToUsers.length);
+				var str = '';
+				for(var i = 0 ; i < copyToUsers.length ; i++){
+					str += '<span class="flowPeople" id="'+copyToUsers[i].executorId+'" taskId="'+copyToUsers[i].taskId+'"><span class="head" style="background:'+that.changeColor()+'">'+copyToUsers[i].executorName+'</span><br/>'+copyToUsers[i].executorName+'</span>';
+				}
+				console.log(str)
+				$('.lookCopyTo .flowArea .copyTo').html(str);
+			}
+			if(data.mustCopyToUsers){
+				var mustCopyToUsers = data.mustCopyToUsers;
+				var mustStr = '';
+				for(var i = 0 ; i < mustCopyToUsers.length ; i++){
+					mustStr += '<span class="flowPeople" id="'+mustCopyToUsers[i].executorId+'" taskId="'+mustCopyToUsers[i].taskId+'"><span class="head" style="background:'+that.changeColor()+'">'+mustCopyToUsers[i].executorName+'</span><br/>'+mustCopyToUsers[i].executorName+'</span>';
+				}
+				$('.lookCopyTo .flowArea .mustCopyTo').html(mustStr);
+			}
 		});
 		that.$index.ajax(that,'/phMyProcess/getExamineIdea.ph',info,function(data){
-			that.items = data;
+			var str = '';
+			for(var i=0;i<data.length;i++){
+				str += '<div class="flowArea">'
+			         + '<div class="flowStatus" style="border-top:none;padding:4px;">'
+				     + '<div  class="flowStatus1" style="line-height:40px;">审批人</div>'
+				     +'<div  class="flowStatus2">'
+					 +'<span class="head" style="background:'+that.changeColor()+'">'+(data[i].executorName|| "")+'</span>'
+					 +(data[i].executorName|| "")
+					 +'</div>'
+					 +'</div>'
+					 +'<div class="flowStatus">'
+				     +'<div  class="flowStatus1">审批意见</div>'
+				     +'<div  class="flowStatus2">'+ (data[i].executorIdea || "") +'</div></div>';
+				if(data[i].examineStatus == 1){
+					str += '<div class="button examine-btn">待审</div>';
+				}else if(data[i].examineStatus == 2){
+					str += '<div class="button">通过</div>';
+				}else if(data[i].examineStatus == 3){
+					str += '<div class="button reject-btn">驳回</div>';
+				}else if(data[i].examineStatus == 4){
+					str += '<div class="button reject-btn">撤回</div>';
+				}
+				str += '</div>';
+			}
+			$('.lookCopyTo .logArea').append(str);
 		});
 	},
 	methods: {
